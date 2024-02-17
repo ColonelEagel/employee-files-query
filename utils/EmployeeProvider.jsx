@@ -173,6 +173,7 @@ const EmployeeProvider = ({ children }) => {
     setEmployees((prevEmployees) =>
       prevEmployees.filter((employee) => employee.id !== id)
     );
+    toast.success("Employee deleted successfully");
   };
 
   // Add a new employee
@@ -183,6 +184,7 @@ const EmployeeProvider = ({ children }) => {
       ...prevEmployees,
       { id: length + 1,employeeCode: `E${newEmployeeCode + length}`,...data }
     ]);
+    toast.success("Employee created successfully");
   };
 
   // Provide the employee data and functions to components
