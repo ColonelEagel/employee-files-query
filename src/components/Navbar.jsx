@@ -7,15 +7,20 @@ import {
     Box,
     Container,
     IconButton,
+    useTheme,
+    useMediaQuery,
 } from "@mui/material";
 
 const Navbar = () => {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
     return (
         <AppBar position="static" color="primary">
             <Container>
-                <Toolbar>
+                <Toolbar sx={ { flexDirection: isMobile ? "column" : "row" } }>
                     {/* Logo */ }
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={ { mr: 2 } }>
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={ { mr: isMobile ? 0 : 2,mb: isMobile ? 1 : 0 } }>
                         <img src="/logan.webp" alt="Logo" /> {/* Placeholder for your logo */ }
                     </IconButton>
 
@@ -25,8 +30,14 @@ const Navbar = () => {
                     </Typography>
 
                     {/* Navigation Links */ }
-                    <Box sx={ { display: "flex",alignItems: "center" } }>
-                        <Button color="inherit" component={ NavLink } to="/" sx={ { marginRight: 2 } }>
+                    <Box
+                        sx={ {
+                            display: "flex",
+                            alignItems: "center",
+                            flexDirection: isMobile ? "column" : "row",
+                        } }
+                    >
+                        <Button color="inherit" component={ NavLink } to="/" sx={ { mr: isMobile ? 0 : 2,mb: isMobile ? 1 : 0 } }>
                             Home
                         </Button>
                         <Button color="inherit" component={ NavLink } to="/edit">
