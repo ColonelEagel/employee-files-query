@@ -1,12 +1,10 @@
 import { createContext,useContext,useEffect,useState } from "react";
-
 import { toast } from "react-toastify";
 
-//create context
+// Create a context for employee data
 export const EmployeeContext = createContext();
 
-
-// Initial employee data
+// Retrieve employees from localStorage or use some default data
 let initialEmployees = JSON.parse(localStorage.getItem("employees")) || [
   {
     id: 1,
@@ -150,46 +148,52 @@ let initialEmployees = JSON.parse(localStorage.getItem("employees")) || [
   },
 ];
 
+
+// Provider component for managing employee data
 const EmployeeProvider = ({ children }) => {
   const [employees,setEmployees] = useState(initialEmployees);
 
-
-  // Save employees to localStorage whenever the array is updated
+  // Update localStorage when employees change
   useEffect(() => {
     localStorage.setItem("employees",JSON.stringify(employees));
   },[employees]);
 
+  // Update an employee's information
   const updateEmployee = (id,updatedEmployee) => {
     setEmployees((prevEmployees) =>
       prevEmployees.map((employee) =>
         employee.id === id ? { ...employee,...updatedEmployee } : employee
       )
     );
-    toast.success("Product added successfully")
+    toast.success("Employee updated successfully");
   };
 
+  // Delete an employee
   const deleteEmployee = (id) => {
     setEmployees((prevEmployees) =>
       prevEmployees.filter((employee) => employee.id !== id)
     );
   };
-  const AddEmployee = (data) => {
-    const length = employees.length
-    let NewEmployeeCode = (length < 10 ? "00" : (length > 10 && length) < 100 ? "0" : "")
-    // if (length < 10 ) {
-    //   NewEmployeeCode = "00"
-    // } else if (length > 10 && length < 100) {
-    //   NewEmployeeCode="0"
-    // }
-    setEmployees((prevEmployees) => [...prevEmployees,{ id: length + 1,employeeCode: `E ${NewEmployeeCode + length} `,...data,}])
-  }
+
+  // Add a new employee
+  const addEmployee = (data) => {
+    const length = employees.length;
+    const newEmployeeCode = length < 10 ? "00" : length < 100 ? "0" : "";
+    setEmployees((prevEmployees) => [
+      ...prevEmployees,
+      { id: length + 1,employeeCode: `E${newEmployeeCode + length}`,...data }
+    ]);
+  };
+
+  // Provide the employee data and functions to components
   return (
-    <EmployeeContext.Provider value={ { employees,updateEmployee,deleteEmployee,AddEmployee } }>
+    <EmployeeContext.Provider value={ { employees,updateEmployee,deleteEmployee,addEmployee } }>
       { children }
     </EmployeeContext.Provider>
   );
 };
 
+// Custom hook for using the employee context
 export const useEmployeeContext = () => useContext(EmployeeContext);
 
 export default EmployeeProvider;

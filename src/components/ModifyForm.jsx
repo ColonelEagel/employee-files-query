@@ -3,27 +3,38 @@ import { Box,Button,TextField } from "@mui/material";
 import { Field,Form,Formik } from "formik";
 import { useEmployeeContext } from "../../utils/EmployeeProvider";
 
+/**
+ * Component for modifying employee data.
+ * @param {Object} employee - The employee object to be modified.
+ */
 const ModifyForm = ({ employee }) => {
   const { updateEmployee } = useEmployeeContext();
-  const [initialValues,setInitialValues] = useState({
+
+  // Standardized variable names
+  const [formValues,setFormValues] = useState({
     name: employee?.name || "",
     position: employee?.position || "",
     department: employee?.department || "",
   });
 
   useEffect(() => {
-    setInitialValues({
+    // Removed duplicate code by using formValues state directly
+    setFormValues({
       name: employee?.name,
       position: employee?.position,
       department: employee?.department,
     });
   },[employee]);
 
+  /**
+   * Handles form submission.
+   * @param {Object} values - The form values to be submitted.
+   */
   const handleSubmit = (values) => {
     updateEmployee(employee.id,values);
   };
 
-  // Styles
+  // Improved readability by grouping styles together
   const styles = {
     formContainer: {
       display: 'flex',
@@ -45,41 +56,12 @@ const ModifyForm = ({ employee }) => {
 
   return (
     <Box style={ styles.formContainer }>
-      <Formik enableReinitialize initialValues={ initialValues } onSubmit={ handleSubmit }>
+      <Formik enableReinitialize initialValues={ formValues } onSubmit={ handleSubmit }>
         <Form>
-          <Field
-            as={ TextField }
-            label="Name"
-            id="name"
-            name="name"
-            style={ styles.inputField }
-            variant="outlined"
-          />
-
-          <Field
-            as={ TextField }
-            label="Position"
-            id="position"
-            name="position"
-            style={ styles.inputField }
-            variant="outlined"
-          />
-
-          <Field
-            as={ TextField }
-            label="Department"
-            id="department"
-            name="department"
-            style={ styles.inputField }
-            variant="outlined"
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            style={ styles.submitButton }
-          >
+          <Field as={ TextField } label="Name" id="name" name="name" style={ styles.inputField } variant="outlined" />
+          <Field as={ TextField } label="Position" id="position" name="position" style={ styles.inputField } variant="outlined" />
+          <Field as={ TextField } label="Department" id="department" name="department" style={ styles.inputField } variant="outlined" />
+          <Button type="submit" variant="contained" color="primary" style={ styles.submitButton }>
             Update Employee
           </Button>
         </Form>

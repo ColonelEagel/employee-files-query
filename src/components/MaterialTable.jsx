@@ -15,39 +15,50 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from "react-router-dom";
 import { useEmployeeContext } from "../../utils/EmployeeProvider";
 
-export default function MateTable(props) {
+/**
+ * Represents a table of employees.
+ * @param {Object} props - The props for the EmployeeTable component.
+ * @param {Array} props.employees - The array of employee data.
+ * @param {Array} props.columns - The array of column definitions for the table.
+ * @param {boolean} props.admin - A flag indicating if the user is an admin.
+ */
+export default function EmployeeTable(props) {
   const { employees,columns,admin } = props;
-  const [employee,setEmployees] = useState(employees);
+  const [employeeData,setEmployeeData] = useState(employees);
   const [selectedEmployee,setSelectedEmployee] = useState(null);
-  const [confirmDialogOpen,setConfirmDialogOpen] = useState(false);
+  const [isDeleteDialogOpen,setDeleteDialogOpen] = useState(false);
   const navigate = useNavigate();
-  const { deleteEmployee,AddEmployee } = useEmployeeContext();
+  const { deleteEmployee,addEmployee } = useEmployeeContext();
 
+  // Update the employee data when the 'employees' prop changes
   useEffect(() => {
-    setEmployees(employees); // Update the state when employees prop changes
+    setEmployeeData(employees);
   },[employees]);
 
+  // Handle the click event for deleting an employee
   const handleDeleteClick = (event,rowData) => {
     setSelectedEmployee(rowData);
-    setConfirmDialogOpen(true);
+    setDeleteDialogOpen(true);
   };
 
+  // Handle the confirm delete action
   const handleConfirmDelete = () => {
     deleteEmployee(selectedEmployee.id,{ deleted: true });
     navigate("/edit/");
-    setConfirmDialogOpen(false);
+    setDeleteDialogOpen(false);
   };
 
+  // Handle the cancel delete action
   const handleCancelDelete = () => {
     setSelectedEmployee(null);
-    setConfirmDialogOpen(false);
+    setDeleteDialogOpen(false);
   };
 
   return (
     <div>
       <MaterialTable
         title="Employee Data"
-        data={ employee }
+        data={ employeeData }
         columns={ columns }
         components={ {
           Container: (props) => <Paper { ...props } elevation={ 0 } />,
@@ -62,22 +73,16 @@ export default function MateTable(props) {
             backgroundColor: '#01579b',
             color: '#FFF',
           },
-
         } }
-        editable={
-          {
-            onRowAdd: newData =>
-              new Promise((resolve) => {
-                setTimeout(() => {
-                  /* setData([...data, newData]); */
-                  AddEmployee(newData)
-                  resolve();
-                },1000);
-              }),
-
-          }
-        }
-
+        editable={ {
+          onRowAdd: newData =>
+            new Promise((resolve) => {
+              setTimeout(() => {
+                addEmployee(newData);
+                resolve();
+              },1000);
+            }),
+        } }
         actions={
           admin
             ? [
@@ -97,7 +102,7 @@ export default function MateTable(props) {
             : []
         }
       />
-      <Dialog open={ confirmDialogOpen } onClose={ handleCancelDelete }>
+      <Dialog open={ isDeleteDialogOpen } onClose={ handleCancelDelete }>
         <DialogTitle>Delete Employee</DialogTitle>
         <DialogContent>
           <DialogContentText>

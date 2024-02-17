@@ -11,6 +11,9 @@ import {
     useMediaQuery,
 } from "@mui/material";
 
+/**
+ * Navbar component for the application
+ */
 const Navbar = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -20,7 +23,7 @@ const Navbar = () => {
             <Container>
                 <Toolbar sx={ { flexDirection: isMobile ? "column" : "row" } }>
                     {/* Logo */ }
-                    <IconButton edge="start" color="inherit" aria-label="menu" sx={ { mr: isMobile ? 0 : 2,mb: isMobile ? 1 : 0 } }>
+                    <IconButton edge="start" color="inherit" aria-label="menu" sx={ { marginRight: isMobile ? 0 : 2,marginBottom: isMobile ? 1 : 0 } }>
                         <img src="/logan.webp" alt="Logo" /> {/* Placeholder for your logo */ }
                     </IconButton>
 
@@ -37,7 +40,7 @@ const Navbar = () => {
                             flexDirection: isMobile ? "column" : "row",
                         } }
                     >
-                        <Button color="inherit" component={ NavLink } to="/" sx={ { mr: isMobile ? 0 : 2,mb: isMobile ? 1 : 0 } }>
+                        <Button color="inherit" component={ NavLink } to="/" sx={ { marginRight: isMobile ? 0 : 2,marginBottom: isMobile ? 1 : 0 } }>
                             Home
                         </Button>
                         <Button color="inherit" component={ NavLink } to="/edit">
