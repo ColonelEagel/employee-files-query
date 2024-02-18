@@ -7,9 +7,9 @@ import RootLayout from './layout/RootLayout';
 import EmployeeFilesQuery from './pages/EmployeeFilesQuery';
 import EditEmployee from './pages/EditEmployee';
 import NotFound from './pages/NotFound';
+import Footer from './components/UI/Footer';
 
 import "./App.css"
-import Footer from './components/Footer';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
