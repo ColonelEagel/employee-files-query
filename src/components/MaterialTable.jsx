@@ -10,8 +10,8 @@ import {
   Button,
 } from "@mui/material";
 import { useEffect,useState } from "react";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { useEmployeeContext } from "../../utils/EmployeeProvider";
 
@@ -22,8 +22,7 @@ import { useEmployeeContext } from "../../utils/EmployeeProvider";
  * @param {Array} props.columns - The array of column definitions for the table.
  * @param {boolean} props.admin - A flag indicating if the user is an admin.
  */
-export default function EmployeeTable(props) {
-  const { employees,columns,admin } = props;
+export default function EmployeeTable({ employees,columns,admin }) {
   const [employeeData,setEmployeeData] = useState(employees);
   const [selectedEmployee,setSelectedEmployee] = useState(null);
   const [isDeleteDialogOpen,setDeleteDialogOpen] = useState(false);
@@ -63,39 +62,43 @@ export default function EmployeeTable(props) {
         components={ {
           Container: (props) => <Paper { ...props } elevation={ 0 } />,
           Toolbar: (props) => (
-            <Box style={ { backgroundColor: '#f4f4f4',padding: 16 } }>
+            <Box style={ { backgroundColor: "#f4f4f4",padding: 16 } }>
               <MTableToolbar { ...props } />
             </Box>
           ),
         } }
         options={ {
           headerStyle: {
-            backgroundColor: '#01579b',
-            color: '#FFF',
+            backgroundColor: "#01579b",
+            color: "#FFF",
           },
         } }
-        editable={ {
-          onRowAdd: newData =>
-            new Promise((resolve) => {
-              setTimeout(() => {
-                addEmployee(newData);
-                resolve();
-              },1000);
-            }),
-        } }
+        editable={
+          admin
+          && {
+            onRowAdd: (newData) =>
+              new Promise((resolve) => {
+                setTimeout(() => {
+                  addEmployee(newData);
+                  resolve();
+                },1000);
+              }),
+          }
+
+        }
         actions={
           admin
             ? [
               {
                 icon: () => <EditIcon />,
-                tooltip: 'Edit Employee',
+                tooltip: "Edit Employee",
                 onClick: (event,rowData) => {
                   navigate("/edit/" + rowData.id);
                 },
               },
               {
                 icon: () => <DeleteIcon />,
-                tooltip: 'Delete Employee',
+                tooltip: "Delete Employee",
                 onClick: handleDeleteClick,
               },
             ]
@@ -106,7 +109,8 @@ export default function EmployeeTable(props) {
         <DialogTitle>Delete Employee</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete { selectedEmployee && selectedEmployee.name }?
+            Are you sure you want to delete{ " " }
+            { selectedEmployee && selectedEmployee.name }?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
